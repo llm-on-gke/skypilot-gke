@@ -17,7 +17,7 @@ service:
   
 envs:
   MODEL_NAME: google/gemma-1.1-2b-it
-  HF_TOKEN: <your-huggingface-token> # TODO: Replace with huggingface token
+  #HF_TOKEN: <your-huggingface-token> # TODO: Replace with huggingface token
 
 resources:
   accelerators: {L4:1,T4:1 } #{A10g:8, A10:8, A100:4, A100:8, A100-80GB:2, A100-80GB:4, A100-80GB:8}
