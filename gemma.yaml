@@ -14,7 +14,7 @@ service:
       max_tokens: 1
     initial_delay_seconds: 1200
   replicas: 2
-
+  
 envs:
   MODEL_NAME: google/gemma-1.1-7b-it
   HF_TOKEN: <your-huggingface-token> # TODO: Replace with huggingface token
@@ -26,7 +26,7 @@ resources:
   use_spot: True
   disk_size: 100  # Ensure model checkpoints can fit.
   disk_tier: best
-
+  ports: 8081  # Expose to internet traffic
 setup: |
   conda activate gemma
   if [ $? -ne 0 ]; then
