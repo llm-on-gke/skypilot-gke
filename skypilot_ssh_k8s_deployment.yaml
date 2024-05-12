@@ -20,7 +20,7 @@ spec:
             secretName: ssh-key-secret
       containers:
       - name: skypilot
-        image:  berkeleyskypilot/skypilot-nightly #us-central1-docker.pkg.dev/skypilot-375900/skypilotk8s/skypilot:latest
+        image:  us-central1-docker.pkg.dev/skypilot-375900/skypilotk8s/skypilot:latest #berkeleyskypilot/skypilot-nightly #
         imagePullPolicy: IfNotPresent
         env:
           - name: SECRET_THING

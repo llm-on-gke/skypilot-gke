@@ -14,7 +14,9 @@ spec:
       containers:
       - name: skypilot
         image: berkeleyskypilot/skypilot-nightly
-      
+        ports:
+        - containerPort: 22
+        command: ["/bin/bash", "-c", "sleep 1000000000"]
         resources:
           requests:
             memory: "2Gi"
@@ -22,5 +24,4 @@ spec:
           limits:
             memory: "2Gi"
             cpu: "2"
-        ports:
-        - containerPort: 7860
+      
