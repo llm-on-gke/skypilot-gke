@@ -13,14 +13,14 @@ spec:
     spec:
       containers:
       - name: skypilot
-        image: us-east1-docker.pkg.dev/rick-vertex-ai/gke-llm/skypilot:latest
+        image: berkeleyskypilot/skypilot-nightly
       
         resources:
           requests:
-            memory: "1Gi"
-            cpu: "1"
+            memory: "2Gi"
+            cpu: "2"
           limits:
-            memory: "1Gi"
-            cpu: "1"
+            memory: "2Gi"
+            cpu: "2"
         ports:
         - containerPort: 7860
