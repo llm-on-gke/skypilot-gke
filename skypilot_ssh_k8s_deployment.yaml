@@ -21,7 +21,7 @@ spec:
       containers:
       - name: skypilot
         image: us-central1-docker.pkg.dev/skypilot-375900/skypilotk8s/skypilot:latest
-        imagePullPolicy: Never
+        imagePullPolicy: IfNotPresent
         env:
           - name: SECRET_THING
             valueFrom:
