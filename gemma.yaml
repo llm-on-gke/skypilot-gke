@@ -22,9 +22,10 @@ envs:
 resources:
   accelerators: {L4:1,T4:1 } #{A10g:8, A10:8, A100:4, A100:8, A100-80GB:2, A100-80GB:4, A100-80GB:8}
   # accelerators: {L4, A10g, A10, L40, A40, A100, A100-80GB} # We can use cheaper accelerators for 8B model.
-  cpus: 1+
-  use_spot: True
-  disk_size: 100  # Ensure model checkpoints can fit.
+  #cpus: 1+
+  #use_spot: True
+  cloud: kubernetes
+  #disk_size: 100  # Ensure model checkpoints can fit.
   disk_tier: best
   ports: 8081  # Expose to internet traffic
 setup: |
