@@ -1,8 +1,10 @@
 resources:
   # Optional; if left out, automatically pick the cheapest cloud.
-  cloud: gcp
+  cloud: kubernetes
   # 1x NVIDIA V100 GPU
   accelerators: t4:1
+  region: us-central1
+
 
 # Working directory (optional) containing the project codebase.
 # Its contents are synced to ~/sky_workdir/ on the cluster.
