@@ -4,17 +4,17 @@ resources:
   
 num_nodes: 2
 file_mounts:
-  /my_data:
+  /training:
     name: ray-train
-    source: ~/data  # Optional: path to local data to upload to the bucket
+    #source: ~/data  # Optional: path to local data to upload to the bucket
     store: gcs  # Optional: either of s3, gcs, r2, ibm
     mode: MOUNT  # Optional: either MOUNT or COPY. Defaults to MOUNT.
   /results:
     name: ray-train
-    source: ~/skypilot-logs  # Optional: path to local data to upload to the bucket
+    #source: ~/skypilot-logs  # Optional: path to local data to upload to the bucket
     store: gcs  # Optional: either of s3, gcs, r2, ibm
     mode: MOUNT  # Optional: either MOUNT or COPY. Defaults to MOUNT.
-workdir: .
+workdir: /training
 
 setup: |
   conda activate ray
