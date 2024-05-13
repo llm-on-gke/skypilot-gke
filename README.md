@@ -37,8 +37,14 @@ sudo apt install rsync
 sudo apt install socat
 sudo apt install netcat
 ## Run Workloads
-HF_TOKEN=xxx sky launch gemma.yaml -n gemma --env HF_TOKEN
+Single instance
+HF_TOKEN=xxx sky launch gemma.yaml -c gemma --env HF_TOKEN
 
+SkyServe:
+HF_TOKEN=xxx sky serve up llama3.yaml -n llama3 --env HF_TOKEN
+
+## Distributed Ray-train
+HF_TOKEN=xxx sky launch rain_train.yaml -c ray --env HF_TOKEN
 
 
 
