@@ -38,13 +38,13 @@ sudo apt install socat
 sudo apt install netcat
 ## Run Workloads
 Single instance
-HF_TOKEN=xxx sky launch gemma.yaml -c gemma --env HF_TOKEN
+HF_TOKEN=xxx sky launch gemma.yaml -c gemma --env HF_TOKEN  --cloud kubernetes
 
 SkyServe:
-HF_TOKEN=xxx sky serve up llama3.yaml -n llama3 --env HF_TOKEN
+HF_TOKEN=xxx sky serve up llama3.yaml -n llama3 --env HF_TOKEN --cloud kubernetes
 
 ## Distributed Ray-train
-HF_TOKEN=xxx sky launch rain_train.yaml -c ray --env HF_TOKEN
+HF_TOKEN=xxx sky launch rain_train.yaml -c ray --env HF_TOKEN --cloud kubernetes
 
 
 
