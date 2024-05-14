@@ -4,7 +4,7 @@ from typing import Dict
 
 from filelock import FileLock
 import ray.train
-from ray.train import ScalingConfig
+from ray.train import Checkpoint,ScalingConfig, CheckpointConfig, RunConfig
 from ray.train.torch import TorchTrainer
 import torch
 from torch import nn
@@ -118,6 +118,14 @@ def train_func_per_worker(config: Dict):
 
         # [3] Report metrics to Ray Train
         # ===============================
+        base_model = (model.module
+            if isinstance(model, DistributedDataParallel) else model)
+        checkpoint_dir = '/checkpoint'#tempfile.mkdtemp()
+        torch.save(
+            {"model_state_dict": base_model.state_dict()},
+            os.path.join(checkpoint_dir, "model.pt"),
+        )
+        checkpoint = Checkpoint.from_directory(checkpoint_dir)
         ray.train.report(metrics={'loss': test_loss, 'accuracy': accuracy})
 
 
@@ -132,12 +140,15 @@ def train_fashion_mnist(num_workers=2, use_gpu=False):
 
     # Configure computation resources
     scaling_config = ScalingConfig(num_workers=num_workers, use_gpu=use_gpu)
+    #train_loop_config = {"num_epochs": 20, "lr": 0.01, "batch_size": 32}
+    run_config = RunConfig(checkpoint_config=CheckpointConfig(num_to_keep=1))
 
     # Initialize a Ray TorchTrainer
     trainer = TorchTrainer(
         train_loop_per_worker=train_func_per_worker,
         train_loop_config=train_config,
         scaling_config=scaling_config,
+        run_config=run_config,
     )
 
     # [4] Start distributed training
