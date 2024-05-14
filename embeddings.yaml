@@ -1,0 +1,52 @@
+ApiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tei-uve-large
+spec:
+  selector:
+    matchLabels:
+      app: tei-uve-large
+  template:
+    metadata:
+      labels:
+        app: tei-uve-large
+    spec:
+      volumes:
+       - name: data
+         emptyDir: {}
+       - name: dshm
+         emptyDir:
+              medium: Memory
+      #nodeSelector:
+      #  cloud.google.com/gke-accelerator: nvidia-testla-t4
+      containers:
+      - name: embeddings
+        image: ghcr.io/huggingface/text-embeddings-inference:1.2
+        #resources:
+        #    limits:
+        #      nvidia.com/gpu: 1
+        env:
+            - name: model-id
+              value: WhereIsAI/UAE-Large-V1
+            - name: shm-size
+              value: 1g
+        ports:
+        - containerPort: 80
+        volumeMounts:
+            - mountPath: /dev/shm
+              name: dshm
+            - mountPath: /data
+              name: data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tei-embedding
+spec:
+  type: LoadBalancer
+  selector:
+    app: tei-uve-large
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 80
