@@ -20,10 +20,10 @@ def get_dataloaders(batch_size):
     # Transform to normalize the input images
     transform = transforms.Compose([ToTensor(), Normalize((0.5,), (0.5,))])
 
-    with FileLock(os.path.expanduser('~/data.lock')):
+    with FileLock(os.path.expanduser('/data.lock')):
         # Download training data from open datasets
         training_data = datasets.FashionMNIST(
-            root='~/data',
+            root='/data',
             train=True,
             download=True,
             transform=transform,
@@ -31,7 +31,7 @@ def get_dataloaders(batch_size):
 
         # Download test data from open datasets
         test_data = datasets.FashionMNIST(
-            root='~/data',
+            root='/data',
             train=False,
             download=True,
             transform=transform,

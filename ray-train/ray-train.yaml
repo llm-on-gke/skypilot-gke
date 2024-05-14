@@ -4,7 +4,7 @@ resources:
   
 num_nodes: 2
 file_mounts:
-  /training:
+  /data:
     name: ray-train
     #source: ~/data  # Optional: path to local data to upload to the bucket
     store: gcs  # Optional: either of s3, gcs, r2, ibm

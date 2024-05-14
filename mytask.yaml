@@ -3,9 +3,9 @@ resources:
   cloud: kubernetes
   # 1x NVIDIA V100 GPU
   accelerators: t4:1
-  region: us-central1
+  #region: us-central1
 
-
+num_nodes: 1  # Number of VMs to launch
 # Working directory (optional) containing the project codebase.
 # Its contents are synced to ~/sky_workdir/ on the cluster.
 workdir: .

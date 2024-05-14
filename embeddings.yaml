@@ -1,4 +1,7 @@
-ApiVersion: apps/v1
+#gcloud container node-pools create embeddings-pool --cluster $CLUSTER_NAME 
+#--accelerator type=nvidia-tesla-t4,count=1,gpu-driver-version=latest   --machine-type n1-standard-4 --ephemeral-storage-local-ssd=count=1   --enable-autoscaling --enable-image-streaming   --num-nodes=1 --min-nodes=0 --max-nodes=3 --shielded-secure-boot   --shielded-integrity-monitoring --node-version=1.29 --node-locations us-east1-c --region us-east1 --spot
+
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tei-uve-large
