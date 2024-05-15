@@ -27,9 +27,9 @@ setup: |
   pip install tqdm
   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
   git clone https://github.com/llm-on-gke/skypilot.git
+  sudo mkdir ./checkpoint
 run: |
   sudo chmod 777 -R /var/tmp
-  sudo mkdir checkpoint
   conda activate ray
   head_ip=`echo "$SKYPILOT_NODE_IPS" | head -n1`
   num_nodes=`echo "$SKYPILOT_NODE_IPS" | wc -l`
