@@ -22,10 +22,10 @@ def get_dataloaders(batch_size):
     # Transform to normalize the input images
     transform = transforms.Compose([ToTensor(), Normalize((0.5,), (0.5,))])
 
-    with FileLock(os.path.expanduser('~/data.lock')):
+    with FileLock(os.path.expanduser('/data.lock')):
         # Download training data from open datasets
         training_data = datasets.FashionMNIST(
-            root='~/data',
+            root='/data',
             train=True,
             download=True,
             transform=transform,
@@ -33,7 +33,7 @@ def get_dataloaders(batch_size):
 
         # Download test data from open datasets
         test_data = datasets.FashionMNIST(
-            root='~/data',
+            root='/data',
             train=False,
             download=True,
             transform=transform,
@@ -122,7 +122,10 @@ def train_func_per_worker(config: Dict):
         # ===============================
         base_model = (model.module
             if isinstance(model, DistributedDataParallel) else model)
-        checkpoint_dir = tempfile.mkdtemp()
+        checkpoint_dir=os.path.join('/checkpoint',f'epoch-{epoch}')
+        if not os.path.exists(checkpoint_dir):
+               os.makedirs(checkpoint_dir)
+        #checkpoint_dir = tempfile.mkdtemp()
         torch.save(
             {"model_state_dict": base_model.state_dict()},
             os.path.join(checkpoint_dir, "model.pt"),
