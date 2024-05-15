@@ -6,6 +6,7 @@ from filelock import FileLock
 import ray.train
 from ray.train import Checkpoint,ScalingConfig, CheckpointConfig, RunConfig
 from ray.train.torch import TorchTrainer
+from torch.nn.parallel import DistributedDataParallel
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
