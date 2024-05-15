@@ -3,17 +3,17 @@ resources:
   #memory: 4+
   
 num_nodes: 2
-file_mounts:
-  /checkpoint:
-    name: ray-train
-    #source: ~/data  # Optional: path to local data to upload to the bucket
-    store: gcs  # Optional: either of s3, gcs, r2, ibm
-    mode: MOUNT  # Optional: either MOUNT or COPY. Defaults to MOUNT.
-  /data:
-    name: ray-train
+#file_mounts:
+#  /checkpoint:
+#    name: ray-train
+#    #source: ~/data  # Optional: path to local data to upload to the bucket
+#    store: gcs  # Optional: either of s3, gcs, r2, ibm
+ #   mode: MOUNT  # Optional: either MOUNT or COPY. Defaults to MOUNT.
+ # /data:
+ #   name: ray-train
     #source: ~/sky_logs  # Optional: path to local data to upload to the bucket
-    store: gcs  # Optional: either of s3, gcs, r2, ibm
-    mode: MOUNT  # Optional: either MOUNT or COPY. Defaults to MOUNT.
+#    store: gcs  # Optional: either of s3, gcs, r2, ibm
+#    mode: MOUNT  # Optional: either MOUNT or COPY. Defaults to MOUNT.
 workdir: .
 
 setup: |
