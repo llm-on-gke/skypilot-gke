@@ -1,5 +1,6 @@
 import argparse
 import os
+import tempfile
 from typing import Dict
 
 from filelock import FileLock
@@ -121,7 +122,7 @@ def train_func_per_worker(config: Dict):
         # ===============================
         base_model = (model.module
             if isinstance(model, DistributedDataParallel) else model)
-        checkpoint_dir = '~/checkpoint'#tempfile.mkdtemp()
+        checkpoint_dir = tempfile.mkdtemp()
         torch.save(
             {"model_state_dict": base_model.state_dict()},
             os.path.join(checkpoint_dir, "model.pt"),
