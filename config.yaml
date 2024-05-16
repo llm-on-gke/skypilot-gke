@@ -1,0 +1,149 @@
+# Advanced Kubernetes configurations (optional).
+kubernetes:
+  # The networking mode for accessing SSH jump pod (optional).
+  #
+  # This must be either: 'nodeport' or 'portforward'. If not specified,
+  # defaults to 'portforward'.
+  #
+  # nodeport: Exposes the jump pod SSH service on a static port number on each
+  # Node, allowing external access to using <NodeIP>:<NodePort>. Using this
+  # mode requires opening multiple ports on nodes in the Kubernetes cluster.
+  #
+  # portforward: Uses `kubectl port-forward` to create a tunnel and directly
+  # access the jump pod SSH service in the Kubernetes cluster. Does not
+  # require opening ports the cluster nodes and is more secure. 'portforward'
+  # is used as default if 'networking' is not specified.
+  networking: portforward
+
+  # The mode to use for opening ports on Kubernetes
+  #
+  # This must be either: 'loadbalancer', 'ingress' or 'podip'.
+  #
+  # loadbalancer: Creates services of type `LoadBalancer` to expose ports.
+  # See https://skypilot.readthedocs.io/en/latest/reference/kubernetes/kubernetes-setup.html#loadbalancer-service.
+  # This mode is supported out of the box on most cloud managed Kubernetes
+  # environments (e.g., GKE, EKS).
+  #
+  # ingress: Creates an ingress and a ClusterIP service for each port opened.
+  # Requires an Nginx ingress controller to be configured on the Kubernetes cluster.
+  # Refer to https://skypilot.readthedocs.io/en/latest/reference/kubernetes/kubernetes-setup.html#nginx-ingress
+  # for details on deploying the NGINX ingress controller.
+  #
+  # podip: Directly returns the IP address of the pod. This mode does not
+  # create any Kubernetes services and is a lightweight way to expose ports.
+  # NOTE - ports exposed with podip mode are not accessible from outside the
+  # Kubernetes cluster. This mode is useful for hosting internal services
+  # that need to be accessed only by other pods in the same cluster.
+  #
+  # Default: loadbalancer
+  ports: loadbalancer
+
+  # Identity to use for all Kubernetes pods (optional).
+  #
+  # LOCAL_CREDENTIALS: The user's local ~/.kube/config will be uploaded to the
+  # Kubernetes pods created by SkyPilot. They are used for authenticating with
+  # the Kubernetes API server and launching new pods (e.g., for
+  # spot/serve controllers).
+  #
+  # SERVICE_ACCOUNT: Local ~/.kube/config is not uploaded to Kubernetes pods.
+  # SkyPilot will auto-create and reuse a service account with necessary roles
+  # in the user's namespace.
+  #
+  # <string>: The name of a service account to use for all Kubernetes pods.
+  # This service account must exist in the user's namespace and have all
+  # necessary permissions. Refer to https://skypilot.readthedocs.io/en/latest/cloud-setup/cloud-permissions/kubernetes.html
+  # for details on the roles required by the service account.
+  #
+  # Using SERVICE_ACCOUNT or a custom service account only affects Kubernetes
+  # instances. Local ~/.kube/config will still be uploaded to non-Kubernetes
+  # instances (e.g., a serve controller on GCP or AWS may need to provision
+  # Kubernetes resources).
+  #
+  # Default: 'SERVICE_ACCOUNT'.
+  
+  # remote_identity: my-k8s-service-account
+
+  # Attach custom metadata to Kubernetes objects created by SkyPilot
+  #
+  # Uses the same schema as Kubernetes metadata object: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#objectmeta-v1-meta
+  #
+  # Since metadata is applied to all all objects created by SkyPilot,
+  # specifying 'name' and 'namespace' fields here is not allowed.
+  #custom_metadata:
+  #  labels:
+  #    mylabel: myvalue
+  #  annotations:
+  #    myannotation: myvalue
+
+  # Timeout for provisioning a pod (in seconds, optional)
+  #
+  # This timeout determines how long SkyPilot will wait for a pod in PENDING
+  # status before giving up, deleting the pending pod and failing over to the
+  # next cloud. Larger timeouts may be required for autoscaling clusters,
+  # since the autoscaler may take some time to provision new nodes.
+  # For example, an autoscaling CPU node pool on GKE may take upto 5 minutes
+  # (300 seconds) to provision a new node.
+  #
+  # Note that this timeout includes time taken by the Kubernetes scheduler
+  # itself, which can be upto 2-3 seconds.
+  #
+  # Can be set to -1 to wait indefinitely for pod provisioning (e.g., in
+  # autoscaling clusters or clusters with queuing/admission control).
+  #
+  # Default: 10 seconds
+  provision_timeout: 180
+
+  # Autoscaler configured in the Kubernetes cluster (optional)
+  #
+  # This field informs SkyPilot about the cluster autoscaler used in the
+  # Kubernetes cluster. Setting this field disables pre-launch checks for
+  # GPU capacity in the cluster and SkyPilot relies on the autoscaler to
+  # provision nodes with the required GPU capacity.
+  #
+  # Remember to set provision_timeout accordingly when using an autoscaler.
+  #
+  # Supported values: gke, karpenter, generic
+  #   gke: uses cloud.google.com/gke-accelerator label to identify GPUs on nodes
+  #   karpenter: uses karpenter.k8s.aws/instance-gpu-name label to identify GPUs on nodes
+  #   generic: uses skypilot.co/accelerator labels to identify GPUs on nodes
+  # Refer to https://skypilot.readthedocs.io/en/latest/reference/kubernetes/kubernetes-setup.html#setting-up-gpu-support
+  # for more details on setting up labels for GPU support.
+  #
+  # Default: null (no autoscaler, autodetect label format for GPU nodes)
+  autoscaler: gke
+
+  # Additional fields to override the pod fields used by SkyPilot (optional)
+  #
+  # Any key:value pairs added here would get added to the pod spec used to
+  # create SkyPilot pods. The schema follows the same schema for a Pod object
+  # in the Kubernetes API:
+  # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#pod-v1-core
+  #
+  # Some example use cases are shown below. All fields are optional.
+  pod_config:
+    metadata:
+      labels:
+        my-label: sky-managed    # Custom labels to SkyPilot pods
+    spec:
+      runtimeClassName: nvidia    # Custom runtimeClassName for GPU pods.
+      #imagePullSecrets:
+      #  - name: my-secret     # Pull images from a private registry using a secret
+      containers:
+        - volumeMounts:       # Custom volume mounts for the pod
+            - name: data-vol
+              mountPath: /checkpoint
+          #env:                # Custom environment variables for the pod, e.g., for proxy
+          #- name: HTTP_PROXY
+          #  value: http://proxy-host:3128
+      volumes:
+        - name: data-vol
+          csi:
+           driver: gcsfuse.csi.storage.gke.io
+           volumeAttributes:
+              bucketName: ray-train
+              mountOptions: "implicit-dirs,uid=1000,gid=100"
+        - name: dshm          # Use this to modify the /dev/shm volume mounted by SkyPilot
+          emptyDir:
+            medium: Memory
+            sizeLimit: 1Gi    # Set a size limit for the /dev/shm volume
+
