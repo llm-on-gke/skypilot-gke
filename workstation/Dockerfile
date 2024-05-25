@@ -5,5 +5,8 @@ RUN apt-get update
 RUN apt-get install -y rsync
 RUN apt install -y socat
 RUN apt install -y netcat
+COPY move-config.sh /etc/workstation-startup.d/
+COPY config.yaml /
+RUN chmod +x /etc/workstation-startup.d/move-config.sh
 
 
