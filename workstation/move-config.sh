@@ -1,3 +1,3 @@
 #!/bin/bash
-mv /settings.json /home/user/.config
-sudo chown -R user /home/user/.config/config.yaml
+mv /config.yaml /home/user/.sky
+sudo chown -R user /home/user/.sky/config.yaml
