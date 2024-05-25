@@ -44,7 +44,7 @@ SkyServe:
 HF_TOKEN=xxx sky serve up llama3.yaml -n llama3 --env HF_TOKEN --cloud kubernetes
 
 ## Distributed Ray-train
-HF_TOKEN=xxx sky launch ray_train.yaml -c ray --env HF_TOKEN --cloud kubernetes
+HF_TOKEN=xxx sky launch ray-train.yaml -c ray --env HF_TOKEN --cloud kubernetes
 
 sky down cluster_name
 

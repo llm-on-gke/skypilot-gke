@@ -1,20 +1,14 @@
 resources:
-  accelerators: L4:1
-  #memory: 4+
-  
-num_nodes: 2
-file_mounts:
-  /checkpoint:
-    name: ray-train
-    #source: ~/data  # Optional: path to local data to upload to the bucket
-    store: gcs  # Optional: either of s3, gcs, r2, ibm
-    mode: MOUNT  # Optional: either MOUNT or COPY. Defaults to MOUNT.
-  /data:
-    name: ray-train
-    #source: ~/sky_logs  # Optional: path to local data to upload to the bucket
-    store: gcs  # Optional: either of s3, gcs, r2, ibm
-    mode: MOUNT  # Optional: either MOUNT or COPY. Defaults to MOUNT.
+  accelerators: T4:1
+  #memory: 64+
+
+num_nodes: 1
+
 workdir: .
+file_mounts:
+    /checkpoints:
+        name: rain-train
+        mode: MOUNT
 
 setup: |
   conda activate ray
@@ -26,8 +20,7 @@ setup: |
   pip install "ray[train]"
   pip install tqdm
   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-  git clone https://github.com/llm-on-gke/skypilot.git
-  sudo mkdir ./checkpoint
+
 run: |
   sudo chmod 777 -R /var/tmp
   conda activate ray
@@ -36,7 +29,7 @@ run: |
   if [ "$SKYPILOT_NODE_RANK" == "0" ]; then
     ps aux | grep ray | grep 6379 &> /dev/null || ray start --head  --disable-usage-stats --port 6379
     sleep 5
-    python skypilot/ray-train/train.py --num-workers $num_nodes
+    python train.py --num-workers $num_nodes
   else
     sleep 5
     ps aux | grep ray | grep 6379 &> /dev/null || ray start --address $head_ip:6379 --disable-usage-stats
