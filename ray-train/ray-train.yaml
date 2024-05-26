@@ -5,10 +5,10 @@ resources:
 num_nodes: 1
 
 workdir: .
-file_mounts:
-    /checkpoints:
-        name: rain-train
-        mode: MOUNT
+#file_mounts:
+#    /checkpoints:
+#        name: rain-train
+#        mode: MOUNT
 
 setup: |
   conda activate ray

@@ -122,7 +122,8 @@ def train_func_per_worker(config: Dict):
         # ===============================
         base_model = (model.module
             if isinstance(model, DistributedDataParallel) else model)
-        checkpoint_dir=os.path.join('/checkpoint',f'epoch-{epoch}')
+        #checkpoint_dir=os.path.join('/checkpoint',f'epoch-{epoch}')
+        checkpoint_dir = tempfile.mkdtemp()
         if not os.path.exists(checkpoint_dir):
                os.makedirs(checkpoint_dir)
         #checkpoint_dir = tempfile.mkdtemp()
