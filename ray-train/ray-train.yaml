@@ -5,9 +5,9 @@ resources:
   #replicas: 2
   #memory: 64+
 
-num_nodes: 1
+num_nodes: 2
 
-workdir: .
+workdir: ray-train
 #file_mounts:
 #    /checkpoints:
 #        name: rain-train
