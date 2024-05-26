@@ -5,7 +5,7 @@ resources:
   #replicas: 2
   #memory: 64+
 
-#num_nodes: 1
+num_nodes: 1
 
 workdir: .
 #file_mounts:
