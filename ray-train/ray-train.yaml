@@ -1,8 +1,11 @@
 resources:
-  accelerators: T4:1
+  accelerators: {T4:1,L4:1}
+  cloud: kubernetes
+  disk_tier: best
+  #replicas: 2
   #memory: 64+
 
-num_nodes: 1
+#num_nodes: 1
 
 workdir: .
 #file_mounts:
