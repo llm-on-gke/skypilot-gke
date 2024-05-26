@@ -7,7 +7,7 @@ resources:
 
 num_nodes: 2
 
-workdir: ray-train
+workdir: .
 #file_mounts:
 #    /checkpoints:
 #        name: rain-train
@@ -23,7 +23,8 @@ setup: |
   pip install "ray[train]"
   pip install tqdm
   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-
+  git clone https://github.com/llm-on-gke/skypilot.git
+  sudo mkdir ./checkpoint
 run: |
   sudo chmod 777 -R /var/tmp
   conda activate ray
