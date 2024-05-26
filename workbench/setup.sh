@@ -1,3 +1,4 @@
+#!/bin/bash
 pip install -U "skypilot-nightly[kubernetes,gcp]"
 export PATH=$PATH:/home/user/.local/bin
 sudo apt-get update
