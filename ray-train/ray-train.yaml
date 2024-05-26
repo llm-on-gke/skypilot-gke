@@ -8,10 +8,10 @@ resources:
 num_nodes: 2
 
 workdir: .
-#file_mounts:
-#    /checkpoint:
-#        name: rain-train
-#        mode: MOUNT
+file_mounts:
+    /checkpoint:
+        name: skypilot-train
+        mode: MOUNT
 
 setup: |
   conda activate ray

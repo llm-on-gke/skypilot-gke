@@ -1,5 +1,6 @@
 import argparse
 import os
+import shutil
 import tempfile
 from typing import Dict
 
@@ -132,6 +133,7 @@ def train_func_per_worker(config: Dict):
             os.path.join(checkpoint_dir, "model.pt"),
         )
         checkpoint = Checkpoint.from_directory(checkpoint_dir)
+        shutil.move(checkpoint_dir, "/checkpoint")  
         ray.train.report(metrics={'loss': test_loss, 'accuracy': accuracy})
 
 
