@@ -10,6 +10,8 @@ RUN apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
 RUN apt-get install -y ssh
 WORKDIR /home/jupiter/.sky
 COPY config.yaml /home/jupiter/.sky
+WORKDIR /home/jupiter
+git clone https://github.com/llm-on-gke
 #RUN chown -R jupiter /home/jupiter/.sky/config.yaml
 
 
