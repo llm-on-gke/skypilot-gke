@@ -5,6 +5,7 @@ RUN apt-get update
 RUN apt-get install -y rsync
 RUN apt-get install -y socat
 RUN apt-get install -y netcat
+RUN apt-get install -y kubectl
 RUN apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
 WORKDIR /home/jupiter/.sky
 COPY config.yaml /home/jupiter/.sky

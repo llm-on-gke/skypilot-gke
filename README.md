@@ -6,7 +6,7 @@
 ## prepare workbench instance
 apt-get install google-cloud-sdk-gke-gcloud-auth-plugin
 
-gcloud workbench instances create skypilot-wb-instance --container-repository= us-east1-docker.pkg.dev/$PROJECT_ID/gke-llm/skypilot-bench --container-tag=latest --machine-type=n1-standard-4 --location=us-central1-b
+gcloud workbench instances create skypilot-wb-instance --container-repository=us-east1-docker.pkg.dev/$PROJECT_ID/gke-llm/skypilot-bench --container-tag=latest --machine-type=n1-standard-4 --location=us-central1-b
 
 
 ## Install Skypilot 
