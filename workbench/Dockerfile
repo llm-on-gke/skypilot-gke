@@ -10,7 +10,7 @@ RUN apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
 #RUN sky check
 WORKDIR /home/jupiter/.sky
 COPY config.yaml /home/jupiter/.sky
-RUN chown -R user /home/jupiter/.sky/config.yaml
+RUN chown -R jupiter /home/jupiter/.sky/config.yaml
 
 
 
