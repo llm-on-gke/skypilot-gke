@@ -9,7 +9,7 @@ RUN apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
 #COPY move-config.sh /etc/workstation-startup.d/
 RUN sky check
 COPY config.yaml /home/jupiter/.sky
-sudo chown -R user /home/jupiter/.sky/config.yaml
+RUN chown -R user /home/jupiter/.sky/config.yaml
 
 
 
