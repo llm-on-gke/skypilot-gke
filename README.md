@@ -3,6 +3,10 @@
 
 ## prepare cloud workstation
 
+## prepare workbench instance
+apt-get install google-cloud-sdk-gke-gcloud-auth-plugin
+
+
 ## Install Skypilot 
 pip install -U "skypilot-nightly[kubernetes,gcp]"
 export PATH=$PATH:/home/user/.local/bin
