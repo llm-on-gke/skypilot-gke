@@ -7,6 +7,7 @@ RUN apt-get install -y socat
 RUN apt-get install -y netcat
 RUN apt-get install -y kubectl
 RUN apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
+RUN apt-get install -y ssh
 WORKDIR /home/jupiter/.sky
 COPY config.yaml /home/jupiter/.sky
 #RUN chown -R jupiter /home/jupiter/.sky/config.yaml
