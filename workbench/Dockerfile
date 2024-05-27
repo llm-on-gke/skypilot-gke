@@ -1,6 +1,6 @@
 FROM gcr.io/deeplearning-platform-release/base-cpu
 RUN pip install -U "skypilot-nightly[kubernetes,gcp]"
-ENV PATH=$PATH:/home/user/.local/bin
+ENV PATH=$PATH:/home/junpiter/.local/bin
 RUN apt-get update
 RUN apt-get install -y rsync
 RUN apt-get install -y socat
