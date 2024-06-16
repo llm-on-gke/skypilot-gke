@@ -38,4 +38,4 @@ spec:
               - bash
               - -xc
               - |
-                torchrun --rdzv_id=123 --nnodes=3 --nproc_per_node=1 --master_addr=$MASTER_ADDR --master_port=$MASTER_PORT --node_rank=$RANK mnist.py --epochs=3 --log-interval=1  
+                torchrun --rdzv_id=123 --nnodes=4 --nproc_per_node=1 --master_addr=$MASTER_ADDR --master_port=$MASTER_PORT --node_rank=$RANK mnist.py --epochs=3 --log-interval=1  
