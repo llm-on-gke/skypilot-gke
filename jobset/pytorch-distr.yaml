@@ -16,7 +16,7 @@ spec:
           spec:
            nodeSelector:
              cloud.google.com/gke-accelerator: nvidia-l4 
-           serviceAccountName: KSA_NAME
+           serviceAccountName: default
            volumes:
            - name: gcs-fuse-csi-ephemeral
              csi:
@@ -46,6 +46,10 @@ spec:
               resources:
                 limits:
                   nvidia.com/gpu: 1
+              volumeMounts:
+              - name: gcs-fuse-csi-ephemeral
+                mountPath: /data
+                readOnly: true
               command:
               - bash
               - -xc
