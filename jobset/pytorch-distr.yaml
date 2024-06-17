@@ -2,6 +2,8 @@ apiVersion: jobset.x-k8s.io/v1alpha2
 kind: JobSet
 metadata:
   name: pytorch
+  annotations:
+    gke-gcsfuse/volumes: "true"
 spec:
   replicatedJobs:
   - name: workers
@@ -14,6 +16,16 @@ spec:
           spec:
            nodeSelector:
              cloud.google.com/gke-accelerator: nvidia-l4 
+           serviceAccountName: KSA_NAME
+           volumes:
+           - name: gcs-fuse-csi-ephemeral
+             csi:
+               driver: gcsfuse.csi.storage.gke.io
+               readOnly: true
+               volumeAttributes:
+                  bucketName: "gs://mlops-repo"
+                  mountOptions: "implicit-dirs"
+                  gcsfuseLoggingSeverity: warning
            containers:
             - name: pytorch
               image: gcr.io/k8s-staging-jobset/pytorch-mnist:latest
