@@ -18,14 +18,14 @@ spec:
           spec:
            nodeSelector:
              cloud.google.com/gke-accelerator: nvidia-l4 
-           serviceAccountName: default
+           serviceAccountName: csi-storage
            volumes:
            - name: gcs-fuse-csi-ephemeral
              csi:
                driver: gcsfuse.csi.storage.gke.io
                readOnly: true
                volumeAttributes:
-                  bucketName: "gs://mlops-repo"
+                  bucketName: "mlops-repo"
                   mountOptions: "implicit-dirs"
                   gcsfuseLoggingSeverity: warning
            containers:
