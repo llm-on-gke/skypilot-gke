@@ -2,8 +2,7 @@ apiVersion: jobset.x-k8s.io/v1alpha2
 kind: JobSet
 metadata:
   name: pytorch
-  annotations:
-    gke-gcsfuse/volumes: "true"
+  
 spec:
   replicatedJobs:
   - name: workers
@@ -13,6 +12,9 @@ spec:
         completions: 4
         backoffLimit: 0
         template:
+          metadata:
+            annotations:
+               gke-gcsfuse/volumes: "true"
           spec:
            nodeSelector:
              cloud.google.com/gke-accelerator: nvidia-l4 
@@ -28,7 +30,7 @@ spec:
                   gcsfuseLoggingSeverity: warning
            containers:
             - name: pytorch
-              image: gcr.io/k8s-staging-jobset/pytorch-mnist:latest
+              image: us-east1-docker.pkg.dev/$PROJECT_ID/gke-llm/pytorch-mnist:latest
               ports:
               - containerPort: 3389
               env:
