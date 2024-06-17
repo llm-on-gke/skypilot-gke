@@ -29,6 +29,8 @@ spec:
                   mountOptions: "implicit-dirs"
                   gcsfuseLoggingSeverity: warning
            containers:
+            - name: gke-gcsfuse-sidecar
+              image: gke.gcr.io/gcs-fuse-csi-driver-sidecar-mounter:v1.2.0-gke.0@sha256:31880114306b1fb5d9e365ae7d4771815ea04eb56f0464a514a810df9470f88f
             - name: pytorch
               image: us-east1-docker.pkg.dev/PROJECT_ID/gke-llm/pytorch-mnist:latest
               ports:
