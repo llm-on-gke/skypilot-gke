@@ -30,7 +30,7 @@ spec:
                   gcsfuseLoggingSeverity: warning
            containers:
             - name: pytorch
-              image: us-east1-docker.pkg.dev/$PROJECT_ID/gke-llm/pytorch-mnist:latest
+              image: us-east1-docker.pkg.dev/PROJECT_ID/gke-llm/pytorch-mnist:latest
               ports:
               - containerPort: 3389
               env:
