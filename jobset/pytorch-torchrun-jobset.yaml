@@ -84,14 +84,12 @@ spec:
                 value: "0"    
               - name: WANDB_API_KEY
                 value: 'XXXX'
-              - name: PYTHON_SCRIPT
-                value: experiments/diffusion/scripts/nba/nba_two_stage.py
               - name: QUICK
                 value: 'False'
               - name: BATCH_SIZE
                 value: '12'
               - name: DATA_FOLDER
-                value: '/irreverent-abtest/datasets/nba_test'
+                value: '/gcs-data'
               - name: DEVICES
                 value: auto
               - name: STRATEGY
