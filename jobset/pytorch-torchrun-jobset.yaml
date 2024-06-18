@@ -1,0 +1,130 @@
+# Distributed training of a traditional CNN model to do image classification 
+# using the MNIST dataset and PyTorch.
+apiVersion: jobset.x-k8s.io/v1alpha2
+kind: JobSet
+metadata:
+  name: pytorch
+spec:
+  replicatedJobs:
+  - name: workers
+    template:
+      spec:
+        parallelism: 5
+        completions: 5
+        backoffLimit: 0
+        template:
+          metadata:
+             annotations:
+               gke-gcsfuse/volumes: "true"
+          spec:
+            hostNetwork: true
+            dnsPolicy: ClusterFirstWithHostNet
+            nodeSelector:
+               cloud.google.com/gke-accelerator: nvidia-h100-mega-80gb
+        #cloud.google.com/gke-spot: "true"
+            serviceAccountName: cloudstorage
+            volumes:
+            - name: libraries
+              hostPath:
+                path: /home/kubernetes/bin/nvidia/lib64
+
+            - name: nvidia-install-dir-host
+              hostPath:
+                path: /home/kubernetes/bin/nvidia
+
+            - name: gcs-fuse-csi-ephemeral
+              csi:
+                driver: gcsfuse.csi.storage.gke.io
+                readOnly: false
+                volumeAttributes:
+                   bucketName: gcs-bucket-name
+                   mountOptions: "implicit-dirs"
+                   gcsfuseLoggingSeverity: warning
+                   fileCacheCapacity: "200Gi"
+
+            - name: dshm
+              emptyDir:
+                medium: Memory
+
+            containers:
+            - name: tcpxo-daemon
+              image: us-docker.pkg.dev/gce-ai-infra/gpudirect-tcpxo/tcpgpudmarxd-dev:v1.0.3
+              imagePullPolicy: Always
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  set -ex
+                  chmod 755 /fts/entrypoint_rxdm_container.sh
+                  /fts/entrypoint_rxdm_container.sh --num_hops=2 --num_nics=8 --uid= --alsologtostderr
+              securityContext:
+                privileged: true
+              volumeMounts:
+                - name: nvidia-install-dir-host
+                  mountPath: /usr/local/nvidia
+              env:
+                - name: LD_LIBRARY_PATH
+                  value: /usr/local/nvidia/lib64
+
+            - name: pytorch
+              image: us-west4-docker.pkg.dev/ab-testing-425021/docker-images/pytorch_no_conda:latest
+              # image: gcr.io/k8s-staging-jobset/pytorch-mnist:latest
+              ports:
+              - containerPort: 3389
+              env:
+              - name: MASTER_ADDR
+                value: "pytorch-workers-0-0.pytorch"
+              - name: MASTER_PORT
+                value: "3389"
+              - name: RANK
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.annotations['batch.kubernetes.io/job-completion-index']
+              # Force python to not buffer output and write directly to stdout, so we can view training logs via `kubectl logs`.
+              - name: PYTHONUNBUFFERED
+                value: "0"    
+              - name: WANDB_API_KEY
+                value: 'XXXX'
+              - name: PYTHON_SCRIPT
+                value: experiments/diffusion/scripts/nba/nba_two_stage.py
+              - name: QUICK
+                value: 'False'
+              - name: BATCH_SIZE
+                value: '12'
+              - name: DATA_FOLDER
+                value: '/irreverent-abtest/datasets/nba_test'
+              - name: DEVICES
+                value: auto
+              - name: STRATEGY
+                value: ddp
+              - name: NCCL_DEBUG
+                value: INFO
+              - name: NUM_NODES
+                value: '5'
+              - name: LD_LIBRARY_PATH
+                value: /usr/local/nvidia/lib64  
+              securityContext:
+                privileged: true                  
+              command:
+              - bash
+              - -xc
+              - |
+                torchrun --rdzv_id=123 --nnodes=5 --nproc_per_node=1 --master_addr=$MASTER_ADDR --master_port=$MASTER_PORT --node_rank=$RANK mnist.py --epochs=1 --log-interval=1  
+              resources:
+                requests:
+                  cpu: "8"
+                  memory: "25Gi"
+                  ephemeral-storage: "25Gi"
+                  nvidia.com/gpu: 8
+                limits:
+                  # cpu: "2"
+                  # memory: "25Gi"
+                  # ephemeral-storage: "25Gi"
+                  nvidia.com/gpu: 8
+
+              volumeMounts:
+               - mountPath: /dev/shm
+                 name: dshm
+               - mountPath: /gcs-data
+                 name: gcs-fuse-csi-ephemeral
+               - name: nvidia-install-dir-host
+                 mountPath: /usr/local/nvidia
