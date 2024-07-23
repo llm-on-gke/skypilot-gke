@@ -8,8 +8,8 @@ spec:
   - name: workers
     template:
       spec:
-        parallelism: 4
-        completions: 4
+        parallelism: 2
+        completions: 2
         backoffLimit: 0
         template:
           metadata:
@@ -17,20 +17,9 @@ spec:
                gke-gcsfuse/volumes: "true"
           spec:
            nodeSelector:
-             cloud.google.com/gke-accelerator: nvidia-l4 
-           serviceAccountName: csi-storage
-           volumes:
-           - name: gcs-fuse-csi-ephemeral
-             csi:
-               driver: gcsfuse.csi.storage.gke.io
-               readOnly: true
-               volumeAttributes:
-                  bucketName: "mlops-repo"
-                  mountOptions: "implicit-dirs"
-                  gcsfuseLoggingSeverity: warning
+             cloud.google.com/gke-accelerator: nvidia-h100-80gb
+           #serviceAccountName: csi-storage     
            containers:
-            - name: gke-gcsfuse-sidecar
-              image: gke.gcr.io/gcs-fuse-csi-driver-sidecar-mounter:v1.2.0-gke.0@sha256:31880114306b1fb5d9e365ae7d4771815ea04eb56f0464a514a810df9470f88f
             - name: pytorch
               image: us-east1-docker.pkg.dev/rick-vertex-ai/gke-llm/pytorch-mnist:latest
               ports:
@@ -49,11 +38,7 @@ spec:
                 value: "0"
               resources:
                 limits:
-                  nvidia.com/gpu: 1
-              volumeMounts:
-              - name: gcs-fuse-csi-ephemeral
-                mountPath: /data
-                readOnly: true
+                  nvidia.com/gpu: 8
               command:
               - bash
               - -xc
