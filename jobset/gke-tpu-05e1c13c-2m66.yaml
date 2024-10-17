@@ -1,0 +1,586 @@
+apiVersion: v1
+kind: Node
+metadata:
+  annotations:
+    container.googleapis.com/instance_id: "6536704000103774323"
+    csi.volume.kubernetes.io/nodeid: '{"pd.csi.storage.gke.io":"projects/axial-matter-417704/zones/us-central2-b/instances/gke-tpu-05e1c13c-2m66"}'
+    node.alpha.kubernetes.io/ttl: "0"
+    node.gke.io/last-applied-node-labels: cloud.google.com/gke-accelerator-count=4,cloud.google.com/gke-boot-disk=pd-balanced,cloud.google.com/gke-container-runtime=containerd,cloud.google.com/gke-cpu-scaling-level=240,cloud.google.com/gke-logging-variant=DEFAULT,cloud.google.com/gke-max-pods-per-node=110,cloud.google.com/gke-netd-ready=true,cloud.google.com/gke-nodepool=tpuv4-2x2x1,cloud.google.com/gke-os-distribution=cos,cloud.google.com/gke-provisioning=standard,cloud.google.com/gke-stack-type=IPV4,cloud.google.com/gke-tpu-accelerator=tpu-v4-podslice,cloud.google.com/gke-tpu-topology=2x2x1,cloud.google.com/machine-family=ct4p,cloud.google.com/private-node=false,iam.gke.io/gke-metadata-server-enabled=true
+    node.gke.io/last-applied-node-taints: google.com/tpu=present:NoSchedule
+    volumes.kubernetes.io/controller-managed-attach-detach: "true"
+  creationTimestamp: "2024-07-25T21:43:03Z"
+  labels:
+    beta.kubernetes.io/arch: amd64
+    beta.kubernetes.io/instance-type: ct4p-hightpu-4t
+    beta.kubernetes.io/os: linux
+    cloud.google.com/gke-accelerator-count: "4"
+    cloud.google.com/gke-boot-disk: pd-balanced
+    cloud.google.com/gke-container-runtime: containerd
+    cloud.google.com/gke-cpu-scaling-level: "240"
+    cloud.google.com/gke-logging-variant: DEFAULT
+    cloud.google.com/gke-max-pods-per-node: "110"
+    cloud.google.com/gke-netd-ready: "true"
+    cloud.google.com/gke-nodepool: tpuv4-2x2x1
+    cloud.google.com/gke-os-distribution: cos
+    cloud.google.com/gke-provisioning: standard
+    cloud.google.com/gke-stack-type: IPV4
+    cloud.google.com/gke-tpu-accelerator: tpu-v4-podslice
+    cloud.google.com/gke-tpu-topology: 2x2x1
+    cloud.google.com/machine-family: ct4p
+    cloud.google.com/private-node: "false"
+    failure-domain.beta.kubernetes.io/region: us-central2
+    failure-domain.beta.kubernetes.io/zone: us-central2-b
+    iam.gke.io/gke-metadata-server-enabled: "true"
+    kubernetes.io/arch: amd64
+    kubernetes.io/hostname: gke-tpu-05e1c13c-2m66
+    kubernetes.io/os: linux
+    node.kubernetes.io/instance-type: ct4p-hightpu-4t
+    topology.gke.io/zone: us-central2-b
+    topology.kubernetes.io/region: us-central2
+    topology.kubernetes.io/zone: us-central2-b
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:volumes.kubernetes.io/controller-managed-attach-detach: {}
+        f:labels:
+          .: {}
+          f:beta.kubernetes.io/arch: {}
+          f:beta.kubernetes.io/os: {}
+          f:kubernetes.io/arch: {}
+          f:kubernetes.io/hostname: {}
+          f:kubernetes.io/os: {}
+    manager: kubelet
+    operation: Update
+    time: "2024-07-25T21:43:03Z"
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:labels:
+          f:beta.kubernetes.io/instance-type: {}
+          f:failure-domain.beta.kubernetes.io/region: {}
+          f:failure-domain.beta.kubernetes.io/zone: {}
+          f:node.kubernetes.io/instance-type: {}
+          f:topology.kubernetes.io/region: {}
+          f:topology.kubernetes.io/zone: {}
+      f:spec:
+        f:podCIDR: {}
+        f:podCIDRs:
+          .: {}
+          v:"10.44.0.0/24": {}
+        f:providerID: {}
+    manager: cloud-controller-manager
+    operation: Update
+    time: "2024-07-25T21:43:04Z"
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:status:
+        f:addresses:
+          .: {}
+          k:{"type":"ExternalIP"}:
+            .: {}
+            f:address: {}
+            f:type: {}
+          k:{"type":"InternalIP"}:
+            .: {}
+            f:address: {}
+            f:type: {}
+        f:conditions:
+          k:{"type":"NetworkUnavailable"}:
+            .: {}
+            f:lastHeartbeatTime: {}
+            f:lastTransitionTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+    manager: cloud-controller-manager
+    operation: Update
+    subresource: status
+    time: "2024-07-25T21:43:04Z"
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:container.googleapis.com/instance_id: {}
+          f:node.gke.io/last-applied-node-labels: {}
+          f:node.gke.io/last-applied-node-taints: {}
+        f:labels:
+          f:cloud.google.com/gke-accelerator-count: {}
+          f:cloud.google.com/gke-boot-disk: {}
+          f:cloud.google.com/gke-container-runtime: {}
+          f:cloud.google.com/gke-cpu-scaling-level: {}
+          f:cloud.google.com/gke-logging-variant: {}
+          f:cloud.google.com/gke-max-pods-per-node: {}
+          f:cloud.google.com/gke-netd-ready: {}
+          f:cloud.google.com/gke-nodepool: {}
+          f:cloud.google.com/gke-os-distribution: {}
+          f:cloud.google.com/gke-provisioning: {}
+          f:cloud.google.com/gke-stack-type: {}
+          f:cloud.google.com/gke-tpu-accelerator: {}
+          f:cloud.google.com/gke-tpu-topology: {}
+          f:cloud.google.com/machine-family: {}
+          f:cloud.google.com/private-node: {}
+          f:iam.gke.io/gke-metadata-server-enabled: {}
+    manager: gcp-controller-manager
+    operation: Update
+    time: "2024-07-25T21:43:05Z"
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:node.alpha.kubernetes.io/ttl: {}
+    manager: kube-controller-manager
+    operation: Update
+    time: "2024-07-25T21:43:09Z"
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:status:
+        f:conditions:
+          k:{"type":"CorruptDockerOverlay2"}:
+            .: {}
+            f:lastHeartbeatTime: {}
+            f:lastTransitionTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+          k:{"type":"DeprecatedAuthsFieldInContainerdConfiguration"}:
+            .: {}
+            f:lastHeartbeatTime: {}
+            f:lastTransitionTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+          k:{"type":"DeprecatedConfigsFieldInContainerdConfiguration"}:
+            .: {}
+            f:lastHeartbeatTime: {}
+            f:lastTransitionTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+          k:{"type":"DeprecatedMirrorsFieldInContainerdConfiguration"}:
+            .: {}
+            f:lastHeartbeatTime: {}
+            f:lastTransitionTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+          k:{"type":"DeprecatedOtherContainerdFeatures"}:
+            .: {}
+            f:lastHeartbeatTime: {}
+            f:lastTransitionTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+          k:{"type":"DeprecatedPullingSchemaV1Image"}:
+            .: {}
+            f:lastHeartbeatTime: {}
+            f:lastTransitionTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+          k:{"type":"DeprecatedUsingV1Alpha2Cri"}:
+            .: {}
+            f:lastHeartbeatTime: {}
+            f:lastTransitionTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+          k:{"type":"FrequentContainerdRestart"}:
+            .: {}
+            f:lastHeartbeatTime: {}
+            f:lastTransitionTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+          k:{"type":"FrequentDockerRestart"}:
+            .: {}
+            f:lastHeartbeatTime: {}
+            f:lastTransitionTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+          k:{"type":"FrequentKubeletRestart"}:
+            .: {}
+            f:lastHeartbeatTime: {}
+            f:lastTransitionTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+          k:{"type":"FrequentUnregisterNetDevice"}:
+            .: {}
+            f:lastHeartbeatTime: {}
+            f:lastTransitionTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+          k:{"type":"KernelDeadlock"}:
+            .: {}
+            f:lastHeartbeatTime: {}
+            f:lastTransitionTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+          k:{"type":"ReadonlyFilesystem"}:
+            .: {}
+            f:lastHeartbeatTime: {}
+            f:lastTransitionTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+          k:{"type":"SysctlChanged"}:
+            .: {}
+            f:lastHeartbeatTime: {}
+            f:lastTransitionTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+    manager: node-problem-detector
+    operation: Update
+    subresource: status
+    time: "2024-07-25T22:48:10Z"
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:taints: {}
+    manager: cluster-autoscaler
+    operation: Update
+    time: "2024-07-25T22:51:59Z"
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:csi.volume.kubernetes.io/nodeid: {}
+        f:labels:
+          f:topology.gke.io/zone: {}
+      f:status:
+        f:allocatable:
+          f:google.com/tpu: {}
+        f:capacity:
+          f:google.com/tpu: {}
+        f:conditions:
+          k:{"type":"DiskPressure"}:
+            f:lastHeartbeatTime: {}
+          k:{"type":"MemoryPressure"}:
+            f:lastHeartbeatTime: {}
+          k:{"type":"PIDPressure"}:
+            f:lastHeartbeatTime: {}
+          k:{"type":"Ready"}:
+            f:lastHeartbeatTime: {}
+            f:lastTransitionTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+        f:images: {}
+    manager: kubelet
+    operation: Update
+    subresource: status
+    time: "2024-07-25T22:52:08Z"
+  name: gke-tpu-05e1c13c-2m66
+  resourceVersion: "6141997"
+  uid: 14d87bcb-deb9-4075-83f2-9d11d48a2f21
+spec:
+  podCIDR: 10.44.0.0/24
+  podCIDRs:
+  - 10.44.0.0/24
+  providerID: gce://axial-matter-417704/us-central2-b/gke-tpu-05e1c13c-2m66
+  taints:
+  - effect: NoSchedule
+    key: google.com/tpu
+    value: present
+status:
+  addresses:
+  - address: 10.130.0.15
+    type: InternalIP
+  - address: 107.167.165.179
+    type: ExternalIP
+  allocatable:
+    cpu: 239330m
+    ephemeral-storage: "47060071478"
+    google.com/tpu: "4"
+    hugepages-1Gi: "0"
+    hugepages-2Mi: "0"
+    memory: 404370364Ki
+    pods: "110"
+  capacity:
+    cpu: "240"
+    ephemeral-storage: 98831908Ki
+    google.com/tpu: "4"
+    hugepages-1Gi: "0"
+    hugepages-2Mi: "0"
+    memory: 419930044Ki
+    pods: "110"
+  conditions:
+  - lastHeartbeatTime: "2024-07-25T22:48:10Z"
+    lastTransitionTime: "2024-07-25T21:43:03Z"
+    message: kernel has no deadlock
+    reason: KernelHasNoDeadlock
+    status: "False"
+    type: KernelDeadlock
+  - lastHeartbeatTime: "2024-07-25T22:48:10Z"
+    lastTransitionTime: "2024-07-25T21:43:03Z"
+    message: kubelet is functioning properly
+    reason: NoFrequentKubeletRestart
+    status: "False"
+    type: FrequentKubeletRestart
+  - lastHeartbeatTime: "2024-07-25T22:48:10Z"
+    lastTransitionTime: "2024-07-25T21:43:03Z"
+    message: 'No deprecation risk: did not find any deprecated ''mirrors'' field in
+      containerd''s config'
+    reason: DeprecatedMirrorsFieldInContainerdConfigurationNotDetected
+    status: "False"
+    type: DeprecatedMirrorsFieldInContainerdConfiguration
+  - lastHeartbeatTime: "2024-07-25T22:48:10Z"
+    lastTransitionTime: "2024-07-25T21:43:03Z"
+    message: node is functioning properly
+    reason: NoFrequentUnregisterNetDevice
+    status: "False"
+    type: FrequentUnregisterNetDevice
+  - lastHeartbeatTime: "2024-07-25T22:48:10Z"
+    lastTransitionTime: "2024-07-25T21:43:03Z"
+    message: 'No deprecation risk: did not pull any schema v1 images'
+    reason: DeprecatedPullingSchemaV1ImageDetected
+    status: "False"
+    type: DeprecatedPullingSchemaV1Image
+  - lastHeartbeatTime: "2024-07-25T22:48:10Z"
+    lastTransitionTime: "2024-07-25T21:43:03Z"
+    message: docker is functioning properly
+    reason: NoFrequentDockerRestart
+    status: "False"
+    type: FrequentDockerRestart
+  - lastHeartbeatTime: "2024-07-25T22:48:10Z"
+    lastTransitionTime: "2024-07-25T21:43:03Z"
+    message: 'No deprecation risk: did not find any deprecations other than 3 configs
+      fields (auths/configs/mirrors), pulling schema v1 images and using v1alpha2
+      CRI.'
+    reason: DeprecatedOtherContainerdFeaturesNotDetected
+    status: "False"
+    type: DeprecatedOtherContainerdFeatures
+  - lastHeartbeatTime: "2024-07-25T22:48:10Z"
+    lastTransitionTime: "2024-07-25T21:43:03Z"
+    message: 'No deprecation risk: did not use v1alpha2 CRI'
+    reason: DeprecatedUsingV1Alpha2CriNotDetected
+    status: "False"
+    type: DeprecatedUsingV1Alpha2Cri
+  - lastHeartbeatTime: "2024-07-25T22:48:10Z"
+    lastTransitionTime: "2024-07-25T21:43:03Z"
+    message: 'No deprecation risk: did not find any deprecated ''configs'' field in
+      containerd''s config'
+    reason: DeprecatedConfigsFieldInContainerdConfigurationNotDetected
+    status: "False"
+    type: DeprecatedConfigsFieldInContainerdConfiguration
+  - lastHeartbeatTime: "2024-07-25T22:48:10Z"
+    lastTransitionTime: "2024-07-25T21:43:03Z"
+    message: 'No deprecation risk: did not find any deprecated ''auths'' field in
+      containerd''s config'
+    reason: DeprecatedAuthsFieldInContainerdConfigurationNotDetected
+    status: "False"
+    type: DeprecatedAuthsFieldInContainerdConfiguration
+  - lastHeartbeatTime: "2024-07-25T22:48:10Z"
+    lastTransitionTime: "2024-07-25T21:43:03Z"
+    message: docker overlay2 is functioning properly
+    reason: NoCorruptDockerOverlay2
+    status: "False"
+    type: CorruptDockerOverlay2
+  - lastHeartbeatTime: "2024-07-25T22:48:10Z"
+    lastTransitionTime: "2024-07-25T21:43:03Z"
+    message: Default sysctls are in effect, no unexpected sysctl changes
+    reason: SysctlNotChanged
+    status: "False"
+    type: SysctlChanged
+  - lastHeartbeatTime: "2024-07-25T22:48:10Z"
+    lastTransitionTime: "2024-07-25T21:43:03Z"
+    message: containerd is functioning properly
+    reason: NoFrequentContainerdRestart
+    status: "False"
+    type: FrequentContainerdRestart
+  - lastHeartbeatTime: "2024-07-25T22:48:10Z"
+    lastTransitionTime: "2024-07-25T21:43:03Z"
+    message: Filesystem is not read-only
+    reason: FilesystemIsNotReadOnly
+    status: "False"
+    type: ReadonlyFilesystem
+  - lastHeartbeatTime: "2024-07-25T21:43:04Z"
+    lastTransitionTime: "2024-07-25T21:43:04Z"
+    message: NodeController create implicit route
+    reason: RouteCreated
+    status: "False"
+    type: NetworkUnavailable
+  - lastHeartbeatTime: "2024-07-25T22:52:08Z"
+    lastTransitionTime: "2024-07-25T21:43:02Z"
+    message: kubelet has sufficient memory available
+    reason: KubeletHasSufficientMemory
+    status: "False"
+    type: MemoryPressure
+  - lastHeartbeatTime: "2024-07-25T22:52:08Z"
+    lastTransitionTime: "2024-07-25T21:43:02Z"
+    message: kubelet has no disk pressure
+    reason: KubeletHasNoDiskPressure
+    status: "False"
+    type: DiskPressure
+  - lastHeartbeatTime: "2024-07-25T22:52:08Z"
+    lastTransitionTime: "2024-07-25T21:43:02Z"
+    message: kubelet has sufficient PID available
+    reason: KubeletHasSufficientPID
+    status: "False"
+    type: PIDPressure
+  - lastHeartbeatTime: "2024-07-25T22:52:08Z"
+    lastTransitionTime: "2024-07-25T21:43:07Z"
+    message: kubelet is posting ready status. AppArmor enabled
+    reason: KubeletReady
+    status: "True"
+    type: Ready
+  daemonEndpoints:
+    kubeletEndpoint:
+      Port: 10250
+  images:
+  - names:
+    - us-central2-docker.pkg.dev/axial-matter-417704/ml/experiments@sha256:31776bd55b79aabc45d720f0f9afc389dab1fb21d0899e1e0704fe4aa4765899
+    - us-central2-docker.pkg.dev/axial-matter-417704/ml/experiments:jurgis-20240725-155142
+    sizeBytes: 1636956564
+  - names:
+    - us-central2-docker.pkg.dev/axial-matter-417704/ml/experiments@sha256:0be280ed48f977d14c99c063f2e87cfebfff178558a5e6d7f1b12aff9f565970
+    - us-central2-docker.pkg.dev/axial-matter-417704/ml/experiments:jurgis-20240725-154305
+    sizeBytes: 1636956559
+  - names:
+    - us-central2-docker.pkg.dev/axial-matter-417704/ml/experiments@sha256:d2b3d23e2353bf7fb0fedce93109b21c705e7abf83cdc93a6bbbad7332f82dc8
+    - us-central2-docker.pkg.dev/axial-matter-417704/ml/experiments:jurgis-20240725-152802
+    sizeBytes: 1636956322
+  - names:
+    - us-central2-docker.pkg.dev/axial-matter-417704/ml/experiments@sha256:9e9daa24dd8b5bfa72d815734d8d9b35f1d87d88711c167c19862a775f288e9f
+    - us-central2-docker.pkg.dev/axial-matter-417704/ml/experiments:jurgis-20240725-145020
+    sizeBytes: 1636955869
+  - names:
+    - us-central2-docker.pkg.dev/axial-matter-417704/ml/experiments@sha256:5157650ea87b2ead978a7f279cc7e9d4046c4040b40cc4233b81c4f85e0575c4
+    - us-central2-docker.pkg.dev/axial-matter-417704/ml/experiments:jurgis-20240725-144119
+    sizeBytes: 1636955762
+  - names:
+    - asia.gcr.io/gke-release-staging/cilium/cilium@sha256:2767f4c2fa36061d35bf4548ece9fe6019b930a21937523ccc7ce95f56676b2b
+    - eu.gcr.io/gke-release-staging/cilium/cilium@sha256:2767f4c2fa36061d35bf4548ece9fe6019b930a21937523ccc7ce95f56676b2b
+    - gcr.io/gke-release-staging/cilium/cilium@sha256:2767f4c2fa36061d35bf4548ece9fe6019b930a21937523ccc7ce95f56676b2b
+    - asia.gke.gcr.io/cilium/cilium:v1.13.12-gke.12
+    - eu.gke.gcr.io/cilium/cilium:v1.13.12-gke.12
+    sizeBytes: 168706413
+  - names:
+    - gke.gcr.io/prometheus-engine/prometheus@sha256:aa631b2f63f54f350887000fb9f1fc2cf1a4820652140e458751f27858bdf081
+    sizeBytes: 111686799
+  - names:
+    - gke.gcr.io/fluent-bit@sha256:5af6d5890680dec4efe0c0b84d2eb28ba94b8b8c6518087aa7b6356fa07e149a
+    sizeBytes: 94424990
+  - names:
+    - gke.gcr.io/kube-proxy-amd64:v1.29.6-gke.1038001
+    - gke.gcr.io/kube-proxy-amd64:v1.29.6-gke.600
+    - k8s.gcr.io/kube-proxy-amd64:v1.29.6-gke.1038001
+    - k8s.gcr.io/kube-proxy-amd64:v1.29.6-gke.600
+    sizeBytes: 85982904
+  - names:
+    - gke.gcr.io/prometheus-engine/config-reloader@sha256:c1938e18936487256372ba6f36a4797cfe53a612ccc90e6bb0d1c28686e66051
+    sizeBytes: 59087344
+  - names:
+    - gke.gcr.io/gcp-compute-persistent-disk-csi-driver@sha256:2449bf78216d124e3dcb862313f931c3c738c52d1701377ecfcf70dd77482462
+    sizeBytes: 55692667
+  - names:
+    - gke.gcr.io/gke-metadata-server@sha256:6e918918dad4dc53ba4c9e450e6a94046726fe3fbd59a8b161ffa37262ce7ebb
+    sizeBytes: 41190954
+  - names:
+    - asia.gcr.io/gke-release-staging/netd@sha256:eddcd1be200452e595f6175db6b0164445c2e7dd7b08310f6d0ab9a84080b326
+    - eu.gcr.io/gke-release-staging/netd@sha256:eddcd1be200452e595f6175db6b0164445c2e7dd7b08310f6d0ab9a84080b326
+    - gcr.io/gke-release-staging/netd@sha256:eddcd1be200452e595f6175db6b0164445c2e7dd7b08310f6d0ab9a84080b326
+    - gke.gcr.io/netd@sha256:eddcd1be200452e595f6175db6b0164445c2e7dd7b08310f6d0ab9a84080b326
+    - asia.gke.gcr.io/netd:v0.6.28-gke.13
+    sizeBytes: 39991852
+  - names:
+    - asia.gcr.io/gke-release-staging/cilium/certgen@sha256:656184cfb928d6b8a6cc7fb20e46caefcf69781fa91584fadd763a050a40d519
+    - eu.gcr.io/gke-release-staging/cilium/certgen@sha256:656184cfb928d6b8a6cc7fb20e46caefcf69781fa91584fadd763a050a40d519
+    - gcr.io/gke-release-staging/cilium/certgen@sha256:656184cfb928d6b8a6cc7fb20e46caefcf69781fa91584fadd763a050a40d519
+    - asia.gke.gcr.io/cilium/certgen:v0.1.10-gke.3
+    - eu.gke.gcr.io/cilium/certgen:v0.1.10-gke.3
+    sizeBytes: 39527963
+  - names:
+    - gke.gcr.io/gpu-maintenance-handler@sha256:3a537c4108b5cc332b17af02279d729374e2d78fe84a7650467fa70b0ac1ec25
+    sizeBytes: 39011714
+  - names:
+    - gke.gcr.io/fluent-bit-gke-exporter@sha256:3d4e3fa9e777e197a1fc9489b2da3976d2e694532efd846603a48b57b09e51ec
+    sizeBytes: 32964344
+  - names:
+    - asia.gcr.io/gke-release-staging/netd-init@sha256:60cf139d0a5e479bdd7bf53960b4d7d686525a5bfef6b849acea27b266571378
+    - eu.gcr.io/gke-release-staging/netd-init@sha256:60cf139d0a5e479bdd7bf53960b4d7d686525a5bfef6b849acea27b266571378
+    - gcr.io/gke-release-staging/netd-init@sha256:60cf139d0a5e479bdd7bf53960b4d7d686525a5bfef6b849acea27b266571378
+    - gke.gcr.io/netd-init@sha256:60cf139d0a5e479bdd7bf53960b4d7d686525a5bfef6b849acea27b266571378
+    - asia.gke.gcr.io/netd-init:v0.6.28-gke.13
+    sizeBytes: 32046317
+  - names:
+    - asia.gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent@sha256:28fee664d08014774479092c8b9cc13a1d03b84ba5cf730546bc06948ff27378
+    - eu.gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent@sha256:28fee664d08014774479092c8b9cc13a1d03b84ba5cf730546bc06948ff27378
+    - gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent@sha256:28fee664d08014774479092c8b9cc13a1d03b84ba5cf730546bc06948ff27378
+    - asia.gke.gcr.io/cilium/slim-daemon/anet-agent:v1.13.12-gke.12
+    - eu.gke.gcr.io/cilium/slim-daemon/anet-agent:v1.13.12-gke.12
+    sizeBytes: 31045629
+  - names:
+    - gke.gcr.io/gke-metrics-agent@sha256:303ca2e51a60384917731f06d0f23a109fbc1c5a7da4e84c29e2c992ecd7f053
+    sizeBytes: 27017534
+  - names:
+    - gke.gcr.io/tpu-device-plugin@sha256:9dc232972ed399851a5236f8d7b4440c21df729cc28af10380ab5c7647ee8113
+    sizeBytes: 24951638
+  - names:
+    - gke.gcr.io/gke-metrics-collector@sha256:6a2226a1aedf6c13988dbf2a156d3a385821eceb97781229f1d0378c0da770a3
+    sizeBytes: 24331839
+  - names:
+    - asia.gcr.io/gke-release-staging/anthos-networking/anetd-sidecar@sha256:6b2dc166d4fb5d7016c9c5050acb4cfffcf53ab3a04e6473dc483df690841e90
+    - eu.gcr.io/gke-release-staging/anthos-networking/anetd-sidecar@sha256:6b2dc166d4fb5d7016c9c5050acb4cfffcf53ab3a04e6473dc483df690841e90
+    - gcr.io/gke-release-staging/anthos-networking/anetd-sidecar@sha256:6b2dc166d4fb5d7016c9c5050acb4cfffcf53ab3a04e6473dc483df690841e90
+    - asia.gke.gcr.io/anthos-networking/anetd-sidecar:v2.9.10
+    - eu.gke.gcr.io/anthos-networking/anetd-sidecar:v2.9.10
+    sizeBytes: 23946922
+  - names:
+    - gke.gcr.io/gke-metrics-collector@sha256:545f5594f9a6ee714b315897f92edeaa858b1074e4c6a38894353214907e4fe5
+    sizeBytes: 23805895
+  - names:
+    - asia.gcr.io/gke-release-staging/cilium/hubble-cli@sha256:6404f05889c6a193c83b24de0690f3486f527bea1926a8b9070c3365507ed230
+    - eu.gcr.io/gke-release-staging/cilium/hubble-cli@sha256:6404f05889c6a193c83b24de0690f3486f527bea1926a8b9070c3365507ed230
+    - gcr.io/gke-release-staging/cilium/hubble-cli@sha256:6404f05889c6a193c83b24de0690f3486f527bea1926a8b9070c3365507ed230
+    - asia.gke.gcr.io/cilium/hubble-cli:v0.12.3-gke.4
+    - eu.gke.gcr.io/cilium/hubble-cli:v0.12.3-gke.4
+    sizeBytes: 23733623
+  - names:
+    - asia.gcr.io/gke-release-staging/gke-metrics-collector@sha256:08d4d400306b9b6e1124f1e62b578b99a8ea1eda8b26d2821cb1438519d95f72
+    - eu.gcr.io/gke-release-staging/gke-metrics-collector@sha256:08d4d400306b9b6e1124f1e62b578b99a8ea1eda8b26d2821cb1438519d95f72
+    - gcr.io/gke-release-staging/gke-metrics-collector@sha256:08d4d400306b9b6e1124f1e62b578b99a8ea1eda8b26d2821cb1438519d95f72
+    - asia.gke.gcr.io/gke-metrics-collector:20240211_2300_RC0
+    - eu.gke.gcr.io/gke-metrics-collector:20240211_2300_RC0
+    sizeBytes: 23364363
+  nodeInfo:
+    architecture: amd64
+    bootID: f395dd12-d4cb-4add-b78e-78232eec8a85
+    containerRuntimeVersion: containerd://1.7.15
+    kernelVersion: 6.1.85+
+    kubeProxyVersion: v1.29.6-gke.1038001
+    kubeletVersion: v1.29.6-gke.1038001
+    machineID: 56a3f16d07c8626e3cba1712b4f025ae
+    operatingSystem: linux
+    osImage: Container-Optimized OS from Google
+    systemUUID: 56a3f16d-07c8-626e-3cba-1712b4f025ae

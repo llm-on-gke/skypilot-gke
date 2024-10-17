@@ -1,0 +1,60 @@
+
+apiVersion: jobset.x-k8s.io/v1alpha2
+kind: JobSet
+metadata:
+  name: pytorch
+  
+spec:
+  replicatedJobs:
+  - name: workers
+    template:
+      spec:
+        parallelism: 2
+        completions: 2
+        backoffLimit: 0
+        template:
+          metadata:
+            annotations:
+               gke-gcsfuse/volumes: "true"
+               gke-gcsfuse/memory-limit: "0"
+               gke-gcsfuse/ephemeral-storage-limit: "0"
+               gke-gcsfuse/cpu-limit: "0"
+          spec:
+           nodeSelector:
+             cloud.google.com/gke-accelerator: nvidia-h100-mega-80gb
+           volumes: 
+            - name: gcs-pvc
+              persistentVolumeClaim:
+               claimName: training-data
+               readOnly: false          
+           serviceAccountName: storage-access     
+           containers:
+            - name: pytorch
+              image: us-east1-docker.pkg.dev/northam-ce-mlai-tpu/gke-llm/pytorch-mnist:latest
+              ports:
+              - containerPort: 3389
+              env:
+              - name: MASTER_ADDR
+                value: "pytorch-workers-0-0.pytorch"
+              - name: MASTER_PORT
+                value: "3389"
+              - name: RANK
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.annotations['batch.kubernetes.io/job-completion-index']
+              # Force python to not buffer output and write directly to stdout, so we can view training logs via `kubectl logs`.
+              - name: PYTHONUNBUFFERED
+                value: "0"
+              volumeMounts:
+               - mountPath: /irreverent-datasets
+                 name: gcs-pvc  
+              resources:
+                limits:
+                  nvidia.com/gpu: 8
+              command:
+              - bash
+              - -xc
+              - |
+                sleep 60000
+                #torchrun --rdzv_id=123 --nnodes=4 --nproc_per_node=1 --master_addr=$MASTER_ADDR --master_port=$MASTER_PORT --node_rank=$RANK mnist.py --epochs=3 --log-interval=1  
+

@@ -1,0 +1,263 @@
+apiVersion: jobset.x-k8s.io/v1alpha2
+kind: JobSet
+metadata:
+  name: pytorch-training
+spec:
+  failurePolicy:
+    maxRestarts: 5
+  replicatedJobs:
+    - name: workers
+      template:
+        spec:
+          # TODO: modify these to desired number of nodes
+          parallelism: 64
+          completions: 64
+          backoffLimit: 0
+          template:
+            metadata:
+              labels:
+                app: pytorch-training
+              annotations:
+                gke-gcsfuse/volumes: "true"
+                gke-gcsfuse/memory-request: "5Gi"
+                gke-gcsfuse/memory-limit: "20Gi"
+                gke-gcsfuse/cpu-limit: "0"
+                gke-gcsfuse/ephemeral-storage-limit: "0"
+                devices.gke.io/container.tcpx-daemon: |+
+                  - path: /dev/nvidia0
+                  - path: /dev/nvidia1
+                  - path: /dev/nvidia2
+                  - path: /dev/nvidia3
+                  - path: /dev/nvidia4
+                  - path: /dev/nvidia5
+                  - path: /dev/nvidia6
+                  - path: /dev/nvidia7
+                  - path: /dev/nvidiactl
+                  - path: /dev/nvidia-uvm
+                networking.gke.io/default-interface: "eth0"
+                networking.gke.io/interfaces: |
+                  [
+                    {"interfaceName":"eth0","network":"default"},
+                    {"interfaceName":"eth1","network":"vpc1"},
+                    {"interfaceName":"eth2","network":"vpc2"},
+                    {"interfaceName":"eth3","network":"vpc3"},
+                    {"interfaceName":"eth4","network":"vpc4"}
+                  ]
+            spec:
+              restartPolicy: Never
+              serviceAccountName: gcs-fuse-sa
+              imagePullSecrets:
+                - name: aws-ecr-readonly
+              nodeSelector:
+                cloud.google.com/gke-accelerator: nvidia-h100-80gb
+              # hostNetwork: true
+              dnsPolicy: ClusterFirstWithHostNet
+              volumes:
+                - name: gcs-fuse-csi-vol
+                  csi:
+                    driver: gcsfuse.csi.storage.gke.io
+                    readOnly: false
+                    volumeAttributes:
+                      bucketName: cornetto-storage-us-east4
+                      # bucketName: cornetto-storage
+                      mountOptions: "implicit-dirs,file-mode=777,ignore-interrupts,metadata-cache:ttl-secs:-1,metadata-cache:stat-cache-max-size-mb:-1,metadata-cache:type-cache-max-size-mb:-1,file-system:kernel-list-cache-ttl-secs:-1"
+                      # gcsfuseLoggingSeverity: "trace"
+                - name: filestore-vol
+                  persistentVolumeClaim:
+                    claimName: cornetto-artifacts-pvc
+                - name: dshm
+                  emptyDir:
+                    medium: Memory
+                - name: libraries
+                  hostPath:
+                    path: /home/kubernetes/bin/nvidia/lib64
+                - name: tcpx-socket
+                  emptyDir: {}
+                - name: sys
+                  hostPath:
+                    path: /sys
+                - name: proc-sys
+                  hostPath:
+                    path: /proc/sys
+              initContainers:
+                - name: metadata-prefetch-container
+                  image: ubuntu:22.04
+                  restartPolicy: Always
+                  command:
+                    - "/bin/bash"
+                    - "-c"
+                    - |
+                      echo "Starting ls on the bucket..."
+                      # Redirect output to /dev/null to prevent storage of output.
+                      echo "Metadata prefetch for GCS bucket..." && ls -R /mnt/cornetto-storage > /dev/null && echo "Metadata prefetch complete." &
+                      tail -f /dev/null
+                  resources:
+                    requests:
+                      cpu: 250m
+                      memory: 256Mi
+                  securityContext:
+                    allowPrivilegeEscalation: false
+                    capabilities:
+                      drop:
+                        - ALL
+                    readOnlyRootFilesystem: true
+                    runAsGroup: 65534
+                    runAsNonRoot: true
+                    runAsUser: 65534
+                    seccompProfile:
+                      type: RuntimeDefault
+                  volumeMounts:
+                    - name: gcs-fuse-csi-vol
+                      mountPath: /mnt/cornetto-storage
+                      readOnly: false
+                - name: tcpx-daemon
+                  image: us-docker.pkg.dev/gce-ai-infra/gpudirect-tcpx/tcpgpudmarxd-dev:v2.0.11
+                  imagePullPolicy: Always
+                  restartPolicy: Always
+                  command:
+                    - /tcpgpudmarxd/build/app/tcpgpudmarxd
+                    - --gpu_nic_preset
+                    - a3vm
+                    - --gpu_shmem_type
+                    - fd
+                    - --uds_path
+                    - /run/tcpx
+                    - --setup_param
+                    - \"--verbose 128 2 0 \"
+                  securityContext:
+                    privileged: true
+                  volumeMounts:
+                    - name: libraries
+                      mountPath: /usr/local/nvidia/lib64
+                      readOnly: true
+                    - name: tcpx-socket
+                      mountPath: /run/tcpx
+                    - name: sys
+                      mountPath: /hostsysfs
+                    - name: proc-sys
+                      mountPath: /hostprocsysfs
+                  env:
+                    - name: LD_LIBRARY_PATH
+                      value: /usr/local/nvidia/lib64
+              containers:
+                - name: jane-el8
+                  image: 433264734513.dkr.ecr.us-east-1.amazonaws.com/hive-gpu-node:65584120-f29c-459f-1748-cb6f0b16242f
+                  ports:
+                    - containerPort: 3389
+                  securityContext:
+                    capabilities:
+                      add:
+                        - SYS_ADMIN
+                        - SYS_PTRACE
+                        - IPC_LOCK
+                    privileged: true
+                    allowPrivilegeEscalation: true
+                  env:
+                    # TODO: modify this to desired number of nodes
+                    - name: NNODES
+                      value: "64"
+                    - name: JOB_PATH
+                      value: "/mnt/cornetto-storage/serialized_torchrun_jobs/us_xxl_1c"
+                    - name: MASTER_ADDR
+                      value: "pytorch-training-workers-0-0.pytorch-training"
+                    - name: MASTER_PORT
+                      value: "3389"
+                    - name: NODE_RANK
+                      valueFrom:
+                        fieldRef:
+                          fieldPath: metadata.annotations['batch.kubernetes.io/job-completion-index']
+                    # It takes roughly 10min just for the pod to get started on a new node, so we increase the timeout to account for that
+                    - name: TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC
+                      value: "1800"
+                    - name: XAR_EXECUTION_STRATEGY
+                      value: "fuse"
+                    - name: PYTHONUNBUFFERED
+                      value: "0"
+                    - name: OMP_NUM_THREADS
+                      value: "1"
+                    - name: LD_LIBRARY_PATH
+                      value: /usr/local/nvidia/lib64:/usr/local/tcpx/lib64
+                    - name: NCCL_SOCKET_IFNAME
+                      value: eth0
+                    - name: NCCL_ALGO
+                      value: Ring
+                    - name: NCCL_PROTO
+                      value: Simple
+                    - name: NCCL_CROSS_NIC
+                      value: "0"
+                    - name: NCCL_NET_GDR_LEVEL
+                      value: PIX
+                    - name: NCCL_P2P_PXN_LEVEL
+                      value: "0"
+                    - name: NCCL_GPUDIRECTTCPX_SOCKET_IFNAME
+                      value: eth1,eth2,eth3,eth4
+                    - name: NCCL_GPUDIRECTTCPX_CTRL_DEV
+                      value: eth0
+                    - name: NCCL_DYNAMIC_CHUNK_SIZE
+                      value: "524288"
+                    - name: NCCL_P2P_NET_CHUNKSIZE
+                      value: "524288"
+                    - name: NCCL_P2P_PCI_CHUNKSIZE
+                      value: "524288"
+                    - name: NCCL_P2P_NVL_CHUNKSIZE
+                      value: "1048576"
+                    - name: NCCL_BUFFSIZE
+                      value: "1048576"
+                    - name: NCCL_NSOCKS_PERTHREAD
+                      value: "4"
+                    - name: NCCL_SOCKET_NTHREADS
+                      value: "1"
+                    - name: NCCL_GPUDIRECTTCPX_TX_BINDINGS
+                      value: eth1:8-21,112-125;eth2:8-21,112-125;eth3:60-73,164-177;eth4:60-73,164-177
+                    - name: NCCL_GPUDIRECTTCPX_RX_BINDINGS
+                      value: eth1:22-35,126-139;eth2:22-35,126-139;eth3:74-87,178-191;eth4:74-87,178-191
+                    - name: NCCL_GPUDIRECTTCPX_PROGRAM_FLOW_STEERING_WAIT_MICROS
+                      value: "500000"
+                    - name: NCCL_GPUDIRECTTCPX_FORCE_ACK
+                      value: "0"
+                    - name: NCCL_MAX_NCHANNELS
+                      value: "12"
+                    - name: NCCL_MIN_NCHANNELS
+                      value: "12"
+                  resources:
+                    requests:
+                      memory: "1600Gi"
+                      nvidia.com/gpu: "8"
+                    limits:
+                      nvidia.com/gpu: "8"
+                  volumeMounts:
+                    - name: gcs-fuse-csi-vol
+                      mountPath: /mnt/cornetto-storage
+                      readOnly: false
+                    - name: gcs-fuse-csi-vol
+                      subPath: pipeline_v6_davso_copy
+                      mountPath: /j/rs1/archive/intermediate-work-area/nyc-lindsay-gpu/cornetto/pipeline_v6_davso_copy
+                      readOnly: false
+                    - name: filestore-vol
+                      mountPath: /mnt/cornetto-artifacts
+                    - name: filestore-vol
+                      subPath: pipeline_v6_davso_copy/models
+                      mountPath: /j/rs1/archive/intermediate-work-area/nyc-lindsay-gpu/cornetto/pipeline_v6_davso_copy/models
+                    - name: tcpx-socket
+                      mountPath: /tmp
+                    - name: libraries
+                      mountPath: /usr/local/nvidia/lib64
+                      readOnly: true
+                    - mountPath: /dev/shm
+                      name: dshm
+                  command:
+                    - bash
+                    - -xc
+                    - |
+                      /mnt/cornetto-storage/scripts/us_xxl_1c/setup_env.sh
+                      echo "Starting job..."
+                      /tmp/research_strategy.xar --run-with-entrypoint \
+                        torchrun \
+                        --nnodes=$NNODES \
+                        --nproc-per-node=8 \
+                        --rdzv-id=cornetto_train \
+                        --rdzv-backend=c10d \
+                        --rdzv-endpoint=$MASTER_ADDR:$MASTER_PORT \
+                        --node_rank=$NODE_RANK \
+                        --max-restarts=10 \
+                        $JOB_PATH/run.py $JOB_PATH/fn.pickle
